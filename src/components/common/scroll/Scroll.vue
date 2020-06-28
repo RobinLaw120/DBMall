@@ -1,6 +1,6 @@
 <template>
 	<div class="wrapper" ref="wrapper">
-    <div class="content">
+    <div>
       <slot></slot>
     </div>
   </div>
@@ -31,6 +31,7 @@
         probeType: this.probeType,
         pullUpLoad: this.pullUpLoad
       })
+      //监听滚动事件
       this.scroll.on('scroll', (position) => {
         this.$emit('scroll',position)
       })
@@ -41,10 +42,17 @@
     },
     methods: {
       scrollTo(x,y,time=300){
-        this.scroll.scrollTo(x,y,time);
+        this.scroll && this.scroll.scrollTo(x,y,time);
       },
       finishPullUp(){
         this.scroll.finishPullUp();
+      },
+      refresh() {
+        // console.log('-----');
+        this.scroll && this.scroll.refresh()
+      },
+      getScrollY(){
+        return this.scroll ? this.scroll.y : 0;
       }
     }
   }

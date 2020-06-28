@@ -1,9 +1,9 @@
 <template>
 	<div>
-    <swiper>
+    <swiper ref="swiperupdate">
       <swiper-item v-for="item in banners">
         <a :href="item.link">
-          <img :src="item.image" alt="">
+          <img :src="item.image" alt="" @load="imageLoad">
         </a>
       </swiper-item>
     </swiper>
@@ -24,6 +24,30 @@
         default(){
           return []
         }
+      }
+    },
+    data() {
+      return {
+        isLoaded: false,
+        counter: 0,
+        bannersLength: 0
+      }
+    },
+    methods: {
+      imageLoad(){
+        if(!this.isLoaded) {
+          this.isLoaded = true
+        }
+        if(++this.counter === this.bannersLength){
+          // this.$refs.swiperupdate.$forceUpdate()
+          this.$emit('swiperImageLoaded')
+        }
+
+      }
+    },
+    watch: {
+      banners(){
+        this.bannersLength = this.banners.length
       }
     }
   }

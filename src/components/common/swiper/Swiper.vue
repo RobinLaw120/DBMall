@@ -19,11 +19,11 @@
     props: {
       interval: {
 		    type: Number,
-        default: 3000
+        default: 5000
       },
       animDuration: {
 		    type: Number,
-        default: 300
+        default: 500
       },
       moveRatio: {
         type: Number,
