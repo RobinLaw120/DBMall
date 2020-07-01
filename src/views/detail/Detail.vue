@@ -2,6 +2,7 @@
   <div id="detail">
     <detail-nav-bar class="detail-nav" @titleClick="titleClick" ref="detailNav"></detail-nav-bar>
     <scroll class="content" ref="scroll" @scroll="contentScroll" :probe-type="3">
+
       <detail-swiper :top-images="topImages" @swiperImageLoaded="swiperLoad" ref="swiperDetail"></detail-swiper>
       <detail-base-info :goods="goods"></detail-base-info>
       <detail-shop-info :shop="shop"></detail-shop-info>
@@ -10,8 +11,9 @@
       <detail-comment-info :comment-info="commentInfo" ref="comment"></detail-comment-info>
       <goods-list :goods="recommends" ref="recommend"></goods-list>
     </scroll>
-    <detail-bottom-bar @addCart="addToCart"></detail-bottom-bar>
+    <detail-bottom-bar @addToCart="addToCart"></detail-bottom-bar>
     <back-top @click.native="backTopClick" v-show="isShowBackTop"></back-top>
+<!--    <toast :message="message" :is-show="show"></toast>-->
   </div>
 </template>
 
@@ -33,6 +35,11 @@
   import {debounce} from "../../common/utils";
   import {backTopMixin, itemListenerMixin} from "../../common/mixin";
 
+  import {mapActions} from 'vuex'
+
+
+  // import Toast from "../../components/common/toast/Toast";
+
   export default {
     name: "Detail",
     data() {
@@ -46,7 +53,9 @@
         commentInfo: {},
         recommends: [],
         themeTopYs:[],
-        currentIndex: 0
+        currentIndex: 0,
+        // message: '',
+        // show: false
         // itemImageListen: null//混入了
       }
     },
@@ -61,7 +70,8 @@
       DetailParamInfo,
       DetailCommentInfo,
       GoodsList,
-      DetailBottomBar
+      DetailBottomBar,
+      // Toast
     },
     created() {
       //保存iid
@@ -97,6 +107,8 @@
       })
     },
     methods: {
+      ...mapActions(['addCart']),
+
       imageLoad(){
         //图片加载完
         this.$refs.scroll.refresh();
@@ -143,7 +155,33 @@
         // }
       },
       addToCart() {
-        console.log('---');
+        // console.log('---');
+        //1.获取购物车需要展示的信息
+        const product = {}
+        product.image = this.topImages[0];
+        product.title = this.goods.title;
+        product.desc = this.goods.desc;
+        product.price = this.goods.realPrice;
+        product.iid = this.iid;
+        product.count = 0;
+        product.checked = false
+        //2.将商品加入到购物车
+        // this.$store.commit('addCart',product)
+        this.addCart(product).then((res) => {
+          //Toast弹窗
+          // this.show = true;
+          // this.message = res;
+          // // console.log(res);
+          // setTimeout(() => {
+          //   this.show = false;
+          //   this.message = ''
+          // },1500)
+          this.$toast.show()
+        })
+
+        // this.$store.dispatch('addCart',product).then((res) => {
+        //   console.log(res);
+        // })
       }
     },
     mounted() {

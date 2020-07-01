@@ -26,7 +26,7 @@
     name: "DetailBottomBar",
     methods: {
       addToCart() {
-        this.$emit('addCart')
+        this.$emit('addToCart')
       }
     }
   }
@@ -77,7 +77,7 @@
   .bar-right {
     font-size: 15px;
     color: #fff;
-    line-height: 58px;
+    line-height: 49px;
   }
 
   .bar-right .cart {
